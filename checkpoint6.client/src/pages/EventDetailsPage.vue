@@ -10,7 +10,9 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-12 ticket-profile"></div>
+            <div class="col-12 ticket-profile p-3">
+                <img class="img-fluid elevation-2" src="https://thiscatdoesnotexist.com" alt="">
+            </div>
         </div>
         <div class="row comments p-2">
             <textarea name="" id="" cols="30" rows="10"></textarea>
@@ -61,4 +63,12 @@ export default {
 };
 </script>
 <style>
+.ticket-profile img{
+    border-radius: 50px;
+    height: 40px;
+    object-fit: cover;
+    object-position: center;
+};
+
+
 </style>
