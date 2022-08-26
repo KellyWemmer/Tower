@@ -10,11 +10,11 @@
     <!-- <CreateEvent/> -->
 
     <div class="row categories d-flex justify-content-center pt-3 pb-3">    
-      <div class="col-2 btn btn-outline-dark rounded-pill">All</div>
-      <div class="col-2 btn btn-outline-dark rounded-pill">Concert</div>
-      <div class="col-2 btn btn-outline-dark rounded-pill">Convention</div>
-      <div class="col-2 btn btn-outline-dark rounded-pill">Sport</div>
-      <div class="col-2 btn btn-outline-dark rounded-pill">Digital</div>      
+      <div class="col-2 btn btn-outline-dark rounded-pill" @click="filterTerm = ''">All</div>
+      <div class="col-2 btn btn-outline-dark rounded-pill" @click="filterTerm = 'concert'">Concert</div>
+      <div class="col-2 btn btn-outline-dark rounded-pill" @click="filterTerm = 'convention'">Convention</div>
+      <div class="col-2 btn btn-outline-dark rounded-pill" @click="filterTerm = 'sport'">Sport</div>
+      <div class="col-2 btn btn-outline-dark rounded-pill" @click="filterTerm = 'digital'">Digital</div>      
     </div>
     
     <div class="row events masonry bg-dark">
@@ -26,7 +26,7 @@
 </template>
 <script>
 import { computed } from '@vue/reactivity';
-import { onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
 import { AppState } from '../AppState';
 import EventCard from '../components/EventCard.vue';
 import { eventsService } from '../services/EventsService';
@@ -36,6 +36,7 @@ export default {
     name: "Home",
 
     setup() {
+      const filterTerm = ref('')
       async function getEvents() {
         try {
           await eventsService.getAll();
@@ -49,7 +50,9 @@ export default {
         
       })
       return {
-        events: computed(() => AppState.events)
+        filterTerm,
+        events: computed(() => AppState.events.filter(e => filterTerm.value ? e.type == filterTerm.value : true))
+        
       };
     },
     components: { EventCard }
