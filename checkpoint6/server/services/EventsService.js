@@ -51,8 +51,6 @@ class EventsService {
         return `event ${event.name} was cancelled!`
     }
 
-    async getCurrentCapacity() {
-        
-    }
+    
 }
 export const eventsService = new EventsService

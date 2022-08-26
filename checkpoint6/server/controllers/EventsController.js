@@ -2,6 +2,9 @@ import { Auth0Provider } from "@bcwdev/auth0provider"
 import { eventsService } from "../services/EventsService.js"
 import BaseController from "../utils/BaseController.js"
 import { ticketsService } from "../services/TicketsService.js"
+import { commentsService } from "../services/CommentsService.js"
+import { logger } from "../utils/Logger.js"
+
 
 export class EventsController extends BaseController {
     constructor() {
@@ -10,10 +13,12 @@ export class EventsController extends BaseController {
             .get('', this.getAll)
             .get('/:eventId', this.getByEventId)
             .get('/:eventId/tickets', this.getTickets)
+            .get('/:eventId/comments', this.getComments)
             .use(Auth0Provider.getAuthorizedUserInfo)
             .post('', this.create)
             .put('/:eventId', this.editEvent)
             .delete('/:eventId', this.archiveEvent)
+            .delete('/eventId/comments/:id')
             
     }    
     
@@ -24,8 +29,7 @@ export class EventsController extends BaseController {
         } catch (error) {
             next(error)
         }
-    }
-    
+    }    
     async getByEventId(req, res, next) {
         try {
             const event = await eventsService.getByEventId(req.params.eventId)
@@ -41,8 +45,7 @@ export class EventsController extends BaseController {
         } catch (error) {
             next(error)
         }
-    }
-    
+    }    
     async create(req, res, next) {
         try {
             req.body.creatorId = req.userInfo.id
@@ -66,6 +69,26 @@ export class EventsController extends BaseController {
             const message = await eventsService.archiveEvent(req.params.eventId, req.userInfo.id)//Parameters need to match in Services!!!
         return res.send(message)
         } catch (error) {
+            next(error)
+        }
+    }
+
+    async getComments(req, res, next) {
+        try {
+            const comments = await commentsService.getAll({eventId: req.params.eventId})
+            return res.send(comments)
+        } catch (error) {
+            next(error)            
+        }
+    }
+
+    async remove(req, res, next) {
+        try {
+            const commentId = req.params.id
+            await commentsService.remove(commentId)  
+            return res.send("This comment has been deleted")         
+        } catch (error) {
+            logger.log(error)
             next(error)
         }
     }
