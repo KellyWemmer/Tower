@@ -18,7 +18,7 @@ export class EventsController extends BaseController {
             .post('', this.create)
             .put('/:eventId', this.editEvent)
             .delete('/:eventId', this.archiveEvent)
-            .delete('/eventId/comments/:id')
+            
             
     }    
     
@@ -81,15 +81,5 @@ export class EventsController extends BaseController {
             next(error)            
         }
     }
-
-    async remove(req, res, next) {
-        try {
-            const commentId = req.params.id
-            await commentsService.remove(commentId)  
-            return res.send("This comment has been deleted")         
-        } catch (error) {
-            logger.log(error)
-            next(error)
-        }
-    }
+    
 }

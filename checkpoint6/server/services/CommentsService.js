@@ -13,9 +13,12 @@ class CommentsService {
     }
 
     async remove(commentId) {
-        const comment = await this.remove(commentId)
+        const comment = await dbContext.Comments.findById(commentId)
+        // am i the creator of this comment???
+        // check the creator id against the id of the user logged in
+        // @ts-ignore
+        await comment.remove()
         return comment        
     }
 }
-
 export const commentsService = new CommentsService()

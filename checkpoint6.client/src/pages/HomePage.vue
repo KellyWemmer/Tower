@@ -1,13 +1,9 @@
 <template>
   <div class="container-fluid home-page">
-    <!-- <div class="row cover-img">
-      <div class="position-absolute" style="right:0">
-      </div> 
-      <div>
-        <img src="https://unsplash.com/photos/NcdG9mK3PBY" alt="" height="120">
-      </div>  
-    </div> -->
-    <!-- <CreateEvent/> -->
+    <div>
+      <CreateEvent/>
+    </div>
+    
 
     <div class="row categories d-flex justify-content-center pt-3 pb-3">    
       <div class="col-2 btn btn-outline-dark rounded-pill" @click="filterTerm = ''">All</div>
@@ -31,6 +27,7 @@ import { AppState } from '../AppState';
 import EventCard from '../components/EventCard.vue';
 import { eventsService } from '../services/EventsService';
 import Pop from '../utils/Pop';
+import CreateEvent from '../components/CreateEvent.vue';
 
 export default {
     name: "Home",
@@ -55,7 +52,7 @@ export default {
         
       };
     },
-    components: { EventCard }
+    components: { EventCard, CreateEvent }
 };
 </script>
 
