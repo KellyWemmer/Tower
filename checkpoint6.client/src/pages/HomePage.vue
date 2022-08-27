@@ -2,8 +2,7 @@
   <div class="container-fluid home-page">
     <div>
       <CreateEvent/>
-    </div>
-    
+    </div>    
 
     <div class="row categories d-flex justify-content-center pt-3 pb-3">    
       <div class="col-2 btn btn-outline-dark rounded-pill" @click="filterTerm = ''">All</div>

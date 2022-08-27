@@ -2,7 +2,7 @@
     <div class="container-fluid">
         <div class="row bg-dark">
             <div class="col-4">
-                <img class="img-fluid rounded" :src="event.coverImg" alt="">
+                <img class="img-fluid rounded mb-3" :src="event.coverImg" alt="">
             </div>
             <!-- Throw v-if that checks event capacity -->
             <div v-if="event.capacity <= 0" class="col-8">
@@ -16,7 +16,12 @@
                 <p>Remaining Capacity: {{event.capacity}}</p>
                 <button v-if="!hasTicket" class="btn btn-secondary" @click="buyTicket">Buy Ticket</button> 
                 <button v-else class="btn btn-secondary" @click="cancelTicket">Cancel Ticket</button>                
-            </div>           
+            </div>  
+            <div>
+                <div v-if="user.id == event.creatorId">
+                    <button>Delete</button>
+                </div>
+            </div>         
         </div>
 
         <div class="row">
@@ -24,12 +29,12 @@
                 <img class="img-fluid elevation-2" src="https://thiscatdoesnotexist.com" alt="">
             </div>
         </div>
-        <div class="row comments p-2">
-            <textarea name="" id="" cols="30" rows="10"></textarea>
-        </div>
+        <div>
+            <CommentForm/>
+        </div>        
         <div v-for="(c, i) in comments" :key="c.id">
             <CommentCard :comment="c"/>
-        </div>
+        </div> 
     </div>
 </template>
 <script>
@@ -83,6 +88,7 @@ export default {
         return {
             event: computed(() => AppState.activeEvent),
             comments: computed(() => AppState.comments),
+            user: computed(() => AppState.user),//loads user info from AppState to local property
             hasTicket: computed(() => {
                 if (AppState.ticketProfiles.find(t => t.accountId == AppState.account.id)) {
                     return true;
@@ -126,6 +132,7 @@ export default {
 .ticket-profile img{
     border-radius: 50px;
     height: 40px;
+    width: 40px;
     object-fit: cover;
     object-position: center;
 };

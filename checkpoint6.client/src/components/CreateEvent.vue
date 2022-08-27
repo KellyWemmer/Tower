@@ -24,7 +24,7 @@
             </div>
             <div>
                 <label class="form-label" for="start-date">Start Date</label>
-                <input class="form-control" type="date" id="date" name="date" v-model="editable.date"> 
+                <input class="form-control" type="date" id="date" name="date" v-model="editable.startDate"> 
             </div>
             <select class="form-select m-2" aria-label="Default select example">
                 <option selected>Open this select menu</option>
@@ -40,6 +40,7 @@
 
 <script>
 import { ref } from 'vue';
+import { router } from '../router';
 import { eventsService } from '../services/EventsService';
 import { logger } from '../utils/Logger';
 import Pop from '../utils/Pop';
@@ -54,6 +55,7 @@ export default {
                   logger.log('creating event', editable.value)
                   await eventsService.createEvent(editable.value)
                   Pop.toast("Event has been created!")
+                
                 } catch (error) {
                   logger.error(error)
                   Pop.error(error)
