@@ -14,13 +14,15 @@
                 <h4>{{event.name}}</h4>
                 <p>{{event.description}}</p>
                 <p>Remaining Capacity: {{event.capacity}}</p>
-                <p v-if="event.isCanceled">Cancelled</p>
                 <button v-if="!hasTicket" class="btn btn-secondary" @click="buyTicket">Buy Ticket</button> 
                 <button v-else class="btn btn-secondary" @click="cancelTicket">Cancel Ticket</button>                
             </div>  
             <div>
-                <div v-if="user.id == event.creatorId">
+                <div v-if="user.id == event.creatorId && event.isCanceled == false">
                     <button class="btn btn-danger m-3" @click="cancelEvent">Cancel Event</button>
+                </div>
+                <div v-if="event.isCanceled == true">
+                    <h4 class="text-danger p-2">This Event Has Been Cancelled</h4>
                 </div>
             </div>         
         </div>
@@ -127,10 +129,9 @@ export default {
             async cancelEvent() {
                 try {
                     await eventsService.cancelEvent(this.event.id)
-                    Pop.toast(this.event.isCanceled)
+                    this.event.isCanceled == true
                 } catch (error) {
                     logger.error('cancel event', error)
-
                 }
             }
         };
