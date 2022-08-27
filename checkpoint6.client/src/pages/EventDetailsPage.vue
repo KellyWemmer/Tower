@@ -14,8 +14,10 @@
                 <h4>{{event.name}}</h4>
                 <p>{{event.description}}</p>
                 <p>Remaining Capacity: {{event.capacity}}</p>
-                <button v-if="!hasTicket" class="btn btn-secondary" @click="buyTicket">Buy Ticket</button> 
-                <button v-else class="btn btn-secondary" @click="cancelTicket">Cancel Ticket</button>                
+                <div v-if="event.isCanceled == false && event.capacity > 0">
+                    <button v-if="!hasTicket" class="btn btn-secondary" @click="buyTicket">Buy Ticket</button> 
+                    <button v-else class="btn btn-secondary" @click="cancelTicket">Cancel Ticket</button>                
+                </div>                
             </div>  
             <div>
                 <div v-if="user.id == event.creatorId && event.isCanceled == false">
@@ -28,8 +30,8 @@
         </div>
 
         <div class="row">
-            <div class="col-12 ticket-profile p-3">
-                <img class="img-fluid elevation-2" src="https://thiscatdoesnotexist.com" alt="">
+            <div v-for="t in ticketProfiles" class="col-12 ticket-profile p-3">
+                <img class="img-fluid elevation-2" :src="t.profile.picture" :title="t.profile.name" alt="">
             </div>
         </div>
         <div>
@@ -92,6 +94,7 @@ export default {
             event: computed(() => AppState.activeEvent),
             comments: computed(() => AppState.comments),
             user: computed(() => AppState.user),//loads user info from AppState to local property
+            ticketProfiles: computed(() => AppState.ticketProfiles),
             hasTicket: computed(() => {
                 if (AppState.ticketProfiles.find(t => t.accountId == AppState.account.id)) {
                     return true;

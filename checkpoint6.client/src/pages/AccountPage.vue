@@ -5,7 +5,7 @@
   </div>
   <div class="container-fluid">
     <div class="row">
-      <div class="col-3 ticketed-events">
+      <div class="col-12 ticketed-events">
         <div v-for="t in ticketEvents" :key="t.id">
           <TicketedEvent :event="t"/> 
         </div>
