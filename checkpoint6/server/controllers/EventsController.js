@@ -17,7 +17,7 @@ export class EventsController extends BaseController {
             .use(Auth0Provider.getAuthorizedUserInfo)
             .post('', this.create)
             .put('/:eventId', this.editEvent)
-            .delete('/:eventId', this.archiveEvent)
+            .delete('/:eventId', this.cancelEvent)
             
             
     }    
@@ -64,9 +64,9 @@ export class EventsController extends BaseController {
             next(error)
         }
     }    
-    async archiveEvent(req, res, next) {
+    async cancelEvent(req, res, next) {
         try {
-            const message = await eventsService.archiveEvent(req.params.eventId, req.userInfo.id)//Parameters need to match in Services!!!
+            const message = await eventsService.cancelEvent(req.params.eventId, req.userInfo.id)//Parameters need to match in Services!!!
         return res.send(message)
         } catch (error) {
             next(error)

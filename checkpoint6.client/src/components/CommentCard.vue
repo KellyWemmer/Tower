@@ -10,7 +10,7 @@
             <p class="card-text">{{comment.body}}</p>
         </div>
         <div v-if="user.id == comment.creatorId">
-            <button>Delete Comment</button>
+            <button class="btn btn-danger" @click="deleteComment(comment)">Delete Comment</button>
         </div>
     </div>    
 </template>
@@ -18,12 +18,26 @@
 <script>
 import { computed } from '@vue/reactivity';
 import { AppState } from '../AppState';
+import { commentsService } from '../services/CommentsService';
+import { logger } from '../utils/Logger';
+import Pop from '../utils/Pop';
 
 export default {
     props: { comment: { type: Object, required: true}},
     setup() {
         return {
-            user: computed(() => AppState.user)
+            user: computed(() => AppState.user),
+            async deleteComment(comment) {
+                logger.log('comment', comment)
+                try {
+                  const yes = await Pop.confirm('Are you sure you want to delete this?')
+                  if(!yes) {return} 
+                  await commentsService.deleteComment(comment.id)
+                } catch (error) {
+                  logger.error(error)
+                  Pop.error(error)
+                }
+            }
         };
     },
 };

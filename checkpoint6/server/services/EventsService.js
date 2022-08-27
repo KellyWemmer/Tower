@@ -38,7 +38,7 @@ class EventsService {
         await event.save()
         return event
     }
-    async archiveEvent(eventId, userId) {//Params need to match in service!!!
+    async cancelEvent(eventId, userId) {//Params need to match in service!!!
         const event = await this.getByEventId(eventId)
 
         // @ts-ignore

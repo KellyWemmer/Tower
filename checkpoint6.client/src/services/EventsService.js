@@ -26,6 +26,17 @@ class EventsService {
         logger.log('Getting Comments', res.data)
         AppState.comments = res.data
     }
+
+    async cancelEvent(eventId) {
+        const res = await api.delete(`api/events/${eventId}`)
+        logger.log(res)
+        const index = AppState.events.findIndex(e => e.id == eventId)
+        let evnt = AppState.events.find(e => e.id == eventId)
+        logger.log('logging event in services', evnt)
+        evnt.isCanceled = true
+        AppState.events = AppState.events.splice(index, 1, evnt)
+        
+    }
 }
 
 export const eventsService = new EventsService()

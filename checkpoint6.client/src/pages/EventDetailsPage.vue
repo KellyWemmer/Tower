@@ -14,12 +14,13 @@
                 <h4>{{event.name}}</h4>
                 <p>{{event.description}}</p>
                 <p>Remaining Capacity: {{event.capacity}}</p>
+                <p v-if="event.isCanceled">Cancelled</p>
                 <button v-if="!hasTicket" class="btn btn-secondary" @click="buyTicket">Buy Ticket</button> 
                 <button v-else class="btn btn-secondary" @click="cancelTicket">Cancel Ticket</button>                
             </div>  
             <div>
                 <div v-if="user.id == event.creatorId">
-                    <button>Delete</button>
+                    <button class="btn btn-danger m-3" @click="cancelEvent">Cancel Event</button>
                 </div>
             </div>         
         </div>
@@ -46,7 +47,7 @@ import Pop from '../utils/Pop';
 import { useRoute } from 'vue-router';
 import { computed } from '@vue/reactivity';
 import { eventsService } from '../services/EventsService';
-import { onMounted } from 'vue';
+import { onMounted, popScopeId } from 'vue';
 import CommentCard from '../components/CommentCard.vue';
 
 export default {
@@ -119,7 +120,17 @@ export default {
                 }
                 catch (error) {
                     logger.error(error);
-                    Pop.toast(error.message, "error");
+                    Pop.error(error);
+                }
+            },
+
+            async cancelEvent() {
+                try {
+                    await eventsService.cancelEvent(this.event.id)
+                    Pop.toast(this.event.isCanceled)
+                } catch (error) {
+                    logger.error('cancel event', error)
+
                 }
             }
         };
