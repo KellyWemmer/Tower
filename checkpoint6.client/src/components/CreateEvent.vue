@@ -39,23 +39,31 @@
 </template>
 
 <script>
+import { computed } from '@vue/reactivity';
 import { ref } from 'vue';
+import { AppState } from '../AppState';
 import { router } from '../router';
 import { eventsService } from '../services/EventsService';
 import { logger } from '../utils/Logger';
 import Pop from '../utils/Pop';
 
-export default {
+export default {    
     setup() {
         const editable = ref({})
         return {
             editable,
+            lastCreatedEvent: computed(() => AppState.lastCreatedEvent),
             async handleSubmit() {
                 try {
                   logger.log('creating event', editable.value)
                   await eventsService.createEvent(editable.value)
-                  Pop.toast("Event has been created!")
-                
+                  Pop.toast("Event has been created!") 
+                  logger.log('logging props.event', this.lastCreatedEvent)
+                  if (this.lastCreatedEvent != null) {
+                    router.push({ name: 'EventDetails', params: {eventId: this.lastCreatedEvent.id}})
+                  }
+                 
+                  
                 } catch (error) {
                   logger.error(error)
                   Pop.error(error)

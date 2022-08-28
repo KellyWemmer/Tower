@@ -14,6 +14,7 @@ class EventsService {
         const res = await api.post('api/events', newEvent)
         logger.log('creating event from service', res.data)
         AppState.events.unshift(res.data)
+        AppState.lastCreatedEvent = res.data
     }
     async getEventById(eventId){
         const res = await api.get('api/events/' + eventId)

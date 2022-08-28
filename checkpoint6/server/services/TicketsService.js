@@ -8,7 +8,10 @@ class TicketsService{
   }
   async create(body) {
     const tEvent = await dbContext.Events.findById(body.eventId)
-    
+    // @ts-ignore
+    if (tEvent.capacity <= 0) {
+      throw new BadRequest('Event is sold out')
+    }
     const ticket = await dbContext.Tickets.create(body)
     await ticket.populate('event')
     await ticket.populate('profile', 'name picture')

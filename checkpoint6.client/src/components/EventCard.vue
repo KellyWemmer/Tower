@@ -13,13 +13,16 @@
 
 </template>
 <script>
+import { router } from '../router';
+
 
 export default {
    props: {
     event: {type: Object, required: true}
    },
-    setup(props) {
+    setup() {
         return {
+           
             
         };
     },

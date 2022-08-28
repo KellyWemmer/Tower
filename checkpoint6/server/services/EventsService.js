@@ -20,8 +20,13 @@ class EventsService {
         await event.populate('creator', 'name picture')
         return event
     }
-    async editEvent(eventId, eventData) {
+    async editEvent(eventId, eventData, userId) {
         let event = await this.getByEventId(eventId)
+        
+        // @ts-ignore
+        if(event.creatorId.toString() != userId) {
+            throw new Forbidden("You don't have permission to edit that")
+        }
         
         if (event.isCanceled) {
             throw new BadRequest("this event is already cancelled")

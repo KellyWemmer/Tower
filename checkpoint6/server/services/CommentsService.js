@@ -1,4 +1,5 @@
 import { dbContext } from "../db/DbContext"
+import { Forbidden } from "../utils/Errors.js"
 class CommentsService {
         
     async create(commentData) {
@@ -12,10 +13,12 @@ class CommentsService {
         return comment
     }
 
-    async remove(commentId) {
+    async remove(commentId, userId) {
         const comment = await dbContext.Comments.findById(commentId)
-        // am i the creator of this comment???
-        // check the creator id against the id of the user logged in
+        // @ts-ignore
+        if(comment.creatorId.toString() != userId) {
+            throw new Forbidden("You don't have permission to edit that")
+        }
         // @ts-ignore
         await comment.remove()
         return comment        
