@@ -53,6 +53,7 @@ import { computed } from '@vue/reactivity';
 import { eventsService } from '../services/EventsService';
 import { onMounted, popScopeId } from 'vue';
 import CommentCard from '../components/CommentCard.vue';
+import { router } from '../router';
 
 export default {
     setup() {
@@ -122,6 +123,7 @@ export default {
                 try {
                     let ticketToRemove = AppState.ticketProfiles.find(t => t.accountId == AppState.account.id);
                     await ticketsService.deleteTicket(ticketToRemove.id);
+                    this.event.capacity++
                 }
                 catch (error) {
                     logger.error(error);
@@ -132,7 +134,7 @@ export default {
             async cancelEvent() {
                 try {
                     await eventsService.cancelEvent(this.event.id)
-                    this.event.isCanceled == true
+                    this.event.isCanceled = true                   
                 } catch (error) {
                     logger.error('cancel event', error)
                 }
